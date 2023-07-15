@@ -4,7 +4,7 @@ body {
     background: linear-gradient(135deg, #0a192f, #0f2a4d);
     background-size: cover;
     background-position: center top;
-    background-repeat: repeat;
+    background-repeat: no-repeat;
   }
   
 .container {
