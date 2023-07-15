@@ -1,0 +1,193 @@
+body {
+    font-family: "Roboto Mono", monospace;
+    text-align: center;
+    background: linear-gradient(135deg, #0a192f, #0f2a4d);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: repeat;
+  }
+  
+.container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+.page-title {
+    color: #ffffff;
+    margin: 0 0 5px;
+  }
+  
+.page-subtitle {
+    color: #ffffff;
+    margin-top: 5px;
+  }
+
+#anime-catalog {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.anime-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-wrapper {
+  margin: 0 0 15px;
+}
+
+.form-wrapper input {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 15px;
+}
+
+.form-wrapper button {
+  border: 0;
+  color: #ffffff;
+  background: #da1e26;
+  font-weight: bold;
+  padding: 15px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-wrapper button:hover {
+  opacity: 0.8;
+}
+
+.anime-image {
+  width: 180px;
+  height: 300px;
+  margin-bottom: 10px;
+  max-height: 250px;
+}  
+
+.nome-anime {
+  position: relative;
+  color: white;
+  display: inline-block;
+  position: relative;
+}
+
+.anime-container div[contenteditable="true"] {
+  border: 2px solid #fff;
+  border-radius: 4px;
+  padding: 6px;
+  color: #fff;
+}
+
+.anime-container div[contenteditable="true"]:empty::before {
+  content: attr(data-placeholder);
+  color: #ccc;
+}
+
+.anime-container div[contenteditable="true"]:empty:focus::before {
+  content: "";
+}
+
+.star-rating {
+  display: flex;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.star-rating span {
+  font-size: 24px;
+  color: gray;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 0 2px;
+}
+
+.star-rating span:hover,
+.star-rating span.active {
+  color: gold;
+}
+
+/* Estilos para a interrogação dentro da bolinha */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.tooltip:before {
+  content: "?";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
+}
+
+/* Estilos para o pop-up de instruções */
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  left: calc(100% + 10px);
+  opacity: 0;
+  transition: opacity 0.3s;
+  width: 200px;
+  white-space: pre-line;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid black;
+  cursor: pointer;
+  position: absolute;
+  top: 25%;
+  left: -20px;
+}
+
+.menu {
+  display: none;
+  top: calc(100% + 10px);
+  left: 0;
+  padding: 10px;
+  background-color: lightgray;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: fade-in 0.3s ease-in-out forwards;
+  cursor: pointer;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.delete-icon {
+  margin-right: 5px;
+}
