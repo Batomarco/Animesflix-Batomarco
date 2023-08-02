@@ -1,7 +1,7 @@
 body {
     font-family: "Roboto Mono", monospace;
     text-align: center;
-    background: linear-gradient(135deg, #0a192f, #0f2a4d);
+    background: linear-gradient(135deg, #0a192f, #0f2a4d) fixed;
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
@@ -11,11 +11,49 @@ body {
 .container {
     text-align: center;
     padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
 #container {
   width: 100vw;
   height: 100vh;
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 16px;
+  }
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  .form-wrapper  {
+    margin: 0 0 10px;
+  }
+
+  .anime-image {
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  #anime-catalog {
+    margin-top: 10px;
+  }
+
+  .anime-container {
+    width: 100%;
+    max-width: 180px;
+  }
+
+  .nome-anime {
+    max-width: 160px;
+    text-align: center;
+    margin: 0 auto;
+  }
+  
 }
   
 .page-title {
@@ -42,17 +80,37 @@ body {
   align-items: center;
 }
 
-.form-wrapper {
-  margin: 0 0 15px;
+#instrucoes-text p {
+  font-size: 20px;
+  color: white;
+  margin: 13px 20vw;
 }
 
-.form-wrapper input {
-  display: block;
-  margin: 0 auto;
-  padding: 10px 15px;
+#instrucoes-text h2 {
+  color: white;
+  margin-top: -10px;
 }
 
-.form-wrapper button {
+#instrucoes-text #red {
+  color: red;
+}
+
+#versoes h2 {
+  color: white;
+  margin-top: -10px;
+}
+
+#versoes h1 {
+  color: white;
+}
+
+#versoes p {
+  font-size: 20px;
+  color: white;
+  margin: 13px 20vw;
+}
+
+.back-btn {
   border: 0;
   color: #ffffff;
   background: #da1e26;
@@ -61,12 +119,60 @@ body {
   font-size: 16px;
   border-radius: 4px;
   margin-top: 20px;
+  margin-bottom: 10px;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.form-wrapper button:hover {
+.back-btn:hover {
   opacity: 0.8;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-wrapper {
+  margin: 0 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+.form-wrapper input {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.form-container button {
+  border: 0;
+  color: #ffffff;
+  background: #da1e26;
+  font-weight: bold;
+  padding: 15px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: block;
+}
+
+.form-container button:hover {
+  opacity: 0.8;
+}
+
+#btnAdicionarAnime:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#btnAdicionarAnime:disabled:hover {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .anime-image {
@@ -80,7 +186,12 @@ body {
   position: relative;
   color: white;
   display: inline-block;
-  position: relative;
+}
+
+.truncated-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .anime-container div[contenteditable="true"] {
@@ -123,6 +234,7 @@ body {
   position: relative;
   display: inline-block;
   margin-left: 5px;
+  cursor: pointer;
 }
 
 .tooltip:before {
@@ -196,4 +308,95 @@ body {
 
 .delete-icon {
   margin-right: 5px;
+}
+
+#btnRemoverTodos {
+  border: 0;
+  color: #ffffff;
+  background: #da1e26;
+  font-weight: bold;
+  padding: 15px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-top: 70px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#btnRemoverTodos:hover {
+  opacity: 0.8;
+}
+
+/* Estilos para o modal de confirmação */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.btn-sim {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px; 
+  margin-left: 80px;
+}
+
+.btn-nao {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 80px;
+}
+
+/* Estilização para o contêiner do select */
+#select-container {
+  display: inline-block;
+  position: relative;
+  border: 2px solid #da1e26;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 5px;
+  margin: 10px;
+}
+
+/* Estilização para o select */
+#imagem {
+  font-family: "Roboto Mono", monospace;
+  background: transparent;
+  border: none;
+  width: 100%;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
 }

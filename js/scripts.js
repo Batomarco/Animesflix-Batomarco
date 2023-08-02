@@ -1,20 +1,44 @@
-//Ideias futuras:
-//Botão de remover anime;
-//Nome do anime em cima;
-//Interrogação de tutorial;
-//Botão de editar o nome do anime;
-
-//Novas Ideias:
-//Botão que pode escolher formato da imagem, jpg, jpe, png, jpeg
-//Limitar o tamanho do nome, talvez colocar reticencias
-
+//Declaração do array que armazenará as URLs dos animes
 var urlsAnimes = []
+
+//Variavél que guarda o formato da imagem selecionada pelo usuário
+var formatoEscolhido = "";
+
+//Função que verifica o formato da imagem selecionada
+function formatoImagem() {
+    //Obtém o valor da opção selecionada
+    var imagemSelecionada = document.getElementById("imagem").value;
+
+    //Verifica o formato escolhido e atualiza a variável "formatoEscolhido"
+    if (imagemSelecionada === "jpg") {
+        formatoEscolhido = "." + imagemSelecionada;
+        document.getElementById("btnAdicionarAnime").removeAttribute("disabled");
+
+    } else if (imagemSelecionada === "png") {
+        formatoEscolhido = "." + imagemSelecionada;
+        document.getElementById("btnAdicionarAnime").removeAttribute("disabled");
+
+    } else if (imagemSelecionada === "jpeg") {
+        formatoEscolhido = "." + imagemSelecionada;
+        document.getElementById("btnAdicionarAnime").removeAttribute("disabled");
+
+    } else if (imagemSelecionada === "jpe") {
+        formatoEscolhido = "." + imagemSelecionada;
+        document.getElementById("btnAdicionarAnime").removeAttribute("disabled");
+
+    } else {
+        //Caso o formato não seja escolhido, desabilita o botão
+        document.getElementById("btnAdicionarAnime").setAttribute("disabled", "true");
+    }
+
+}
 
 // Função para adicionar um novo anime no array de URLs
 function adicionarAnime() {
     var animeFavorito = document.getElementById("anime").value;
 
-    if (animeFavorito.endsWith(".jpg") || animeFavorito.endsWith(".jpe")) {
+    //Verifica se o animeFavorito termina com o formatoEscolhido válido
+    if (animeFavorito.endsWith(formatoEscolhido)) {
         
         //Adiciona o novo anime ao array de URLs
         var animeObj = {
@@ -31,7 +55,86 @@ function adicionarAnime() {
     } else {
         console.error("Endereço de anime inválido");
     }
+    //Limpa o campo de digitação
     document.getElementById("anime").value = "";
+}
+
+//Função que verifica se a tecla Enter foi pressionada
+function verificarTecla(event) {
+    if (event.keyCode === 13) {
+        adicionarAnime();
+    }
+}
+
+//Função responsável por mostrar e ocultar as instruções na página
+function mostrarInstrucoes() {
+    //Obtém referências aos elementos da página que serão manipulados
+    var subtitle = document.querySelector(".page-subtitle");
+    var placeholderContainer = document.querySelector(".form-wrapper");
+    var animeCatalog = document.getElementById("anime-catalog");
+    var removerTudo = document.getElementById("btnRemoverTodos");
+    var instrucoesTexto = document.getElementById("instrucoes-text");
+    var btnAdicionarAnime = document.getElementById("btnAdicionarAnime");
+
+    //Oculta os elementos da página durante as instruções
+    subtitle.style.display = "none";
+    placeholderContainer.style.display = "none";
+    animeCatalog.style.display = "none";
+    btnAdicionarAnime.style.display = "none"
+
+    //Verifica se o botão de remover está presente antes de tentar ocultá-lo
+    if (removerTudo) {
+        removerTudo.style.display = "none";
+    }
+
+    //Exibe o texto das instruções
+    instrucoesTexto.style.display = ""
+
+    //Botão de Voltar
+    const voltarBtn = document.getElementById("voltar-btn");
+
+    //Adiciona um evento de clique ao botão de voltar
+    voltarBtn.addEventListener("click", function() {
+        //Oculta as instruções
+        instrucoesTexto.style.display = "none";
+
+        //Exibe o conteúdo inicial
+        subtitle.style.display = "";
+        placeholderContainer.style.display = "";
+        animeCatalog.style.display = "";
+        btnAdicionarAnime.style.display = "";
+
+        //Verifica se há animes na lista para decidir o botão de remover tudo
+        var catalogAnime = document.getElementById("anime-catalog");
+        if (catalogAnime.children.length > 0) {
+            //Mostrar o botão somente se houver pelo menos um anime na tela
+            removerTudo.style.display = "";
+        } else {
+            removerTudo.style.display = "none"
+        }
+
+    });
+}
+
+function mostrarVersoes() {
+    const versoesLink = document.getElementById("versoes-link");
+    const versoesElement = document.getElementById("versoes");
+    const voltarBtnVersoes = document.getElementById("voltar-btn-versoes");
+    var instrucoesTexto = document.getElementById("instrucoes-text");
+
+    //Oculta o conteúdo atual
+    instrucoesTexto.style.display = "none";
+
+    //Exibe a seção de versões
+    versoesElement.style.display = "";
+
+    voltarBtnVersoes.addEventListener("click", function() {
+        //Oculta a seção de versões
+        versoesElement.style.display = "none";
+
+        //Exibe o conteúdo inicial
+        instrucoesTexto.style.display = ""
+    });
 }
 
 // Função para listar um anime na tela
@@ -107,6 +210,7 @@ function listarAnimesNaTela(animeFavorito) {
             localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
 
             toggleMenu(menu, setaMenu);
+            toggleBtnRemoverTodos();
         });
     });
 
@@ -117,15 +221,26 @@ function listarAnimesNaTela(animeFavorito) {
     nomeAnime.className = "anime-name";
 
     if (animeFavorito.nome) {
-        nomeAnime.innerHTML = animeFavorito.nome;
+        var textoCompleto = animeFavorito.nome.replace(/<[^>]+>/g, '').trim();
+        var textoLimitado = textoCompleto.slice(0, 14);
+        
+        if (textoCompleto.length > 14) {
+            //Adicionar "..." ao final do texto truncado
+            nomeAnime.innerHTML = textoLimitado + "..."
+            //Usar o nome completo como tooltip
+            nomeAnime.setAttribute("title", textoCompleto);
+        } else {
+            //O nome não precisa ser truncado
+            nomeAnime.innerHTML = textoCompleto;
+        }
     } else {
         nomeAnime.contentEditable = true;
         nomeAnime.dataset.placeholder = "Digite o nome do anime";
-        nomeAnime.innerHTML = "";
+        nomeAnime.innerText = ""; // Usar innerText em vez de innerHTML
         nomeAnime.addEventListener("input", function() {
-            animeFavorito.nome = nomeAnime.innerHTML.trim();
+            animeFavorito.nome = nomeAnime.innerText.trim(); // Usar innerText em vez de innerHTML
             localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
-            if (nomeAnime.innerHTML.trim() === "") {
+            if (nomeAnime.innerText.trim() === "") { // Usar innerText em vez de innerHTML
                 nomeAnime.dataset.placeholder = "Digite o nome do anime";
             } else {
                 nomeAnime.dataset.placeholder = "";
@@ -138,6 +253,12 @@ function listarAnimesNaTela(animeFavorito) {
             }
         });
     }
+
+    //Adicionar a classe "truncated-text" se o texto for maior que o limite
+    if (animeFavorito.nome && animeFavorito.nome.length > 14) {
+        nomeAnime.classList.add("truncated-text");
+    }
+
     divNomeSeta.appendChild(nomeAnime);
 
     //Verifica se o nome do anime está definido
@@ -215,7 +336,52 @@ function carregarAnimes() {
     } else {
         console.log("Nenhum anime salvo encontrado.")
     }
+
+    // Após carregar os animes, verifique se é necessário mostrar o botão "Remover Todos os Animes"
+    toggleBtnRemoverTodos();
 }
+
+//Função para mostrar/ocultar o botão de Remover Animes
+function toggleBtnRemoverTodos() {
+    var btnRemoverTodos = document.getElementById("btnRemoverTodos");
+    var catalogAnime = document.getElementById("anime-catalog");
+    if (catalogAnime.children.length > 0) {
+        //Mostrar o botão somente se houver pelo menos um anime na tela
+        btnRemoverTodos.style.display = "";
+    } else {
+        btnRemoverTodos.style.display = "none"
+    }
+}
+
+//Função para remover todos os animes da array e da tela
+function removerTodosAnimes() {
+    var catalogAnime = document.getElementById("anime-catalog");
+    catalogAnime.innerHTML = "";
+
+    //Limpar a array de animesd
+    urlsAnimes = [];
+
+    // Remover a lista de animes do armazenamento local
+    localStorage.removeItem("urlsAnimes");
+
+    //Esconder o botão após remover todos os animes
+    toggleBtnRemoverTodos();
+
+    //Fechar o modal após a remoção
+    fecharModalConfirmacao();
+}
+
+//Função para abrir o pop-up de confirmação antes de remover todos os animes
+function confirmarRemoverTodosAnimes() {
+    var modalConfirmacao = document.getElementById("modalConfirmacao");
+    modalConfirmacao.style.display = "block";
+}
+
+// Função para fechar o modal de confirmação
+function fecharModalConfirmacao() {
+    var modalConfirmacao = document.getElementById("modalConfirmacao");
+    modalConfirmacao.style.display = "none";
+  }
 
 carregarAnimes();
 

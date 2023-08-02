@@ -13,19 +13,121 @@
             <h1 class="page-title">
               Animesflix
             </h1>
-            <p class="page-subtitle">
+            <p class="page-subtitle" style="display: block">
                 Crie sua lista de animes!
-                <span class="tooltip">
-                    <span class="tooltip-text">Como Funciona: Adicione seus animes favoritos usando a URL da imagem terminada em .jpg. <br>Classifique-os clicando nas estrelas.</span>
+                <span class="tooltip" onclick="mostrarInstrucoes()">
+                    <span class="tooltip-text">Clique para abrir as instruções</span>
                 </span>
             </p>
-            <div class="form-wrapper">
-                <input type="text" id="anime" name="anime" placeholder="Insira o endereço de imagem">
-                <button onClick="adicionarAnime()">Adicionar Anime</button>
+            <div class="form-container">
+                <div class="form-wrapper" style="display: ''">
+                    <input type="text" id="anime" name="anime" placeholder="Insira o endereço de imagem" onkeypress="verificarTecla(event)">
+                    <div id="select-container">
+                        <select id="imagem" onchange="formatoImagem()">
+                            <option value="">Formato</option>
+                            <option value="jpg">.jpg</option>
+                            <option value="png">.png</option>
+                            <option value="jpeg">.jpeg</option>
+                            <option value="jpe">.jpe</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="btnAdicionarAnime" onClick="adicionarAnime()" disabled>Adicionar Anime</button>
             </div>
         </div>
-        <div id="anime-catalog"></div>
+        <div id="anime-catalog" style="display: '';"></div>
         <div class="arrow menu-arrow"></div>
+        <button id="btnRemoverTodos" onclick="confirmarRemoverTodosAnimes()" style="display: none;">Remover Tudo</button>
+
+        <div id="instrucoes-text" style="display: none;">
+            <h2>Instruções:</h2>
+            <p>
+                Crie uma lista com seus animes colando a URL da imagem no local determinado;
+            <br>
+            </p>
+            <p>
+                Escolha o formato de acordo com o final da URL da imagem, se ela é '.jpg', '.png', '.jpeg', '.jpe';
+            <br>
+            </p>
+            <p id="red">
+                Observação: Colocar o formato ao final da URL não irá funcionar!
+            <br>
+            </p>
+            <p>
+                Após adicionar a imagem do anime, adicione também um nome e lembre-se de salvar apertando 'Enter', recarregar a página também funciona;
+            <br>
+            </p>
+            <p>
+                Depois que o nome estiver salvo aparecerá uma setinha "▶" que ao ser clicada, abrirá um menu com a opção de editar o nome do anime, caso precise,
+                e também uma opção para remover o anime da lista, caso queira;
+            <br>
+            </p>
+            <p>
+                Quando o primeiro anime for adicionado a sua lista aparecerá um botão de "Remover Tudo", que irá apagar completamente toda a sua lista, use caso 
+                aconteça algum bug e queira remover tudo (Não se preocupe em apertar sem querer pois pede uma confirmação);
+            <br>
+            </p>
+            <p>
+                Agora se divirta fazendo a sua lista de animes, e os classificando com a nota de acordo com a quantidade de estrelas!
+            </p>
+            <p>
+                <span id="versoes-link" onclick="mostrarVersoes()" style="cursor: pointer; text-decoration: underline;">Versões</span>
+            </p>
+            <button class="back-btn" id="voltar-btn">Voltar</button>
+        </div>
+
+        <div class="section" id="versoes" style="display: none;">
+            <h2>Histórico de Versões</h2>
+            <h1>
+                Versão 1.0:
+            </h1>
+            <p>
+                Inserir a imagem do anime através da URL; <br>
+                Atribuir um nome ao anime; <br>
+                Classificar o anime com estrelas; <br>
+                Menu de editar e remover; <br>
+                Criação da interrogação com tutorial simples. <br>
+            </p>
+            <h1>
+                Versão 2.0:
+            </h1>
+            <p>
+                Botão que pode escolher o formato da imagem; <br>
+                Limitar o tamanho do nome; <br>
+                Apagar o espaço em branco quando digita o nome do anime; <br>
+                Botão de remover tudo; <br>
+                Nova aba com instruções mais detalhadas, e histórico de versões; <br>
+                Tirar a formatação do nome do anime, caso tenha sido copiado. <br>
+            </p>
+            <h1>
+                Ideias Futuras:
+            </h1>
+            <p>
+                Criar uma nova lista com animes para assistir, 'assistir mais tarde'; <br>
+                Animes na lista de assistir mais tade ao invés de estrelas terão um tick, que ao clicar é removido da lista e adicionado na lista de assistidos; <br>
+                Criar uma lista com animes favoritos, onde quando avaliar com 5 estrelas uma cópia surgirá nessa lista favorita; <br>
+                Criar uma tela inicial para acessar as novas listas; <br>
+                Criar instruções visuais, passar pro ladinho; <br>
+                Criar abas para pessoa fazer lista de outras coisas. <br>
+            </p>
+            <button class="back-btn" id="voltar-btn-versoes">Voltar</button>
+        </div>
+
+        <!-- Modal de confirmação personalizado -->
+        <div id="modalConfirmacao" class="modal">
+            <div class="modal-content">
+            <p>
+                Tem certeza de que deseja remover todos os animes?
+                <br>
+                Isso irá APAGAR TODOS os animes.
+            </p>
+            <div class="modal-buttons">
+                <button class="btn-sim" onclick="removerTodosAnimes()">Sim</button>
+                <button class="btn-nao" onclick="fecharModalConfirmacao()">Não</button>
+            </div>
+            </div>
+        </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
         <script type="text/javascript" src="js/scripts.js" ></script>
     </body>
