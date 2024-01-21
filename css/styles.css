@@ -9,11 +9,11 @@ body {
   }
   
 .container {
-    text-align: center;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+  text-align: center;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
 #container {
   width: 100vw;
@@ -57,14 +57,14 @@ body {
 }
   
 .page-title {
-    color: #ffffff;
-    margin: 0 0 5px;
-  }
+  color: #ffffff;
+  margin: 0 0 5px;
+}
   
 .page-subtitle {
-    color: #ffffff;
-    margin-top: 5px;
-  }
+  color: #ffffff;
+  margin-top: 5px;
+}
 
 #anime-catalog {
   display: flex;
@@ -78,54 +78,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-#instrucoes-text p {
-  font-size: 20px;
-  color: white;
-  margin: 13px 20vw;
-}
-
-#instrucoes-text h2 {
-  color: white;
-  margin-top: -10px;
-}
-
-#instrucoes-text #red {
-  color: red;
-}
-
-#versoes h2 {
-  color: white;
-  margin-top: -10px;
-}
-
-#versoes h1 {
-  color: white;
-}
-
-#versoes p {
-  font-size: 20px;
-  color: white;
-  margin: 13px 20vw;
-}
-
-.back-btn {
-  border: 0;
-  color: #ffffff;
-  background: #da1e26;
-  font-weight: bold;
-  padding: 15px 20px;
-  font-size: 16px;
-  border-radius: 4px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.back-btn:hover {
-  opacity: 0.8;
 }
 
 .form-container {
@@ -210,13 +162,23 @@ body {
   content: "";
 }
 
-.star-rating {
+.anime-image {
+  padding: 3px;
+  background-color: white;
+}
+
+.green-border {
+  padding: 3px;
+  background-color: greenyellow;
+}
+
+.checkeds-rating {
   display: flex;
   justify-content: center;
   margin-top: 1px;
 }
 
-.star-rating span {
+.checkeds-rating span {
   font-size: 24px;
   color: gray;
   cursor: pointer;
@@ -224,52 +186,9 @@ body {
   margin: 0 2px;
 }
 
-.star-rating span:hover,
-.star-rating span.active {
-  color: gold;
-}
-
-/* Estilos para a interrogação dentro da bolinha */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.tooltip:before {
-  content: "?";
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #ccc;
-  text-align: center;
-  line-height: 20px;
-  color: #fff;
-}
-
-/* Estilos para o pop-up de instruções */
-.tooltip .tooltip-text {
-  visibility: hidden;
-  width: 120px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  left: calc(100% + 10px);
-  opacity: 0;
-  transition: opacity 0.3s;
-  width: 200px;
-  white-space: pre-line;
-}
-
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
+.checkeds-rating span:hover,
+.checkeds-rating span.active {
+  color: greenyellow;
 }
 
 .arrow {
@@ -399,4 +318,53 @@ body {
   font-size: 16px;
   color: #333;
   cursor: pointer;
+}
+
+/* Estilo para o título da seção */
+.section-title {
+  position: relative;
+  text-align: left;
+  margin-left: 50px;
+  margin-top: 20px;
+}
+
+.section-title h2 {
+  font-size: 16px;
+  color: #333;
+  background-color: #f1f1f1;
+  padding: 5px 10px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+}
+
+/* Estilo para a linha de separação */
+.section-line {
+  position: absolute;
+  top: 75%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #ccc;
+  z-index: 0;
+  margin-right: 50px;
+}
+
+.fa-sort {
+  cursor: pointer;
+}
+
+/* Esconda inicialmente o menu de opções */
+.sort-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+/* Estilize o menu suspenso */
+.sort-menu label {
+  display: block;
+  margin-bottom: 5px;
 }

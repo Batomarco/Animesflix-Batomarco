@@ -1,5 +1,5 @@
 //Declaração do array que armazenará as URLs dos animes
-var urlsAnimes = []
+var urlsAssistirMaisTarde = []
 
 //Variavél que guarda o formato da imagem selecionada pelo usuário
 var formatoEscolhido = "";
@@ -34,24 +34,24 @@ function formatoImagem() {
 }
 
 // Função para adicionar um novo anime no array de URLs
-function adicionarAnime() {
-    var animeFavorito = document.getElementById("anime").value;
+function adicionarAnimeAssistirMaisTarde() {
+    var animeRelogio = document.getElementById("anime").value;
 
     //Verifica se o animeFavorito termina com o formatoEscolhido válido
-    if (animeFavorito.endsWith(formatoEscolhido)) {
-        
+    if (animeRelogio.endsWith(formatoEscolhido)) {
         //Adiciona o novo anime ao array de URLs
         var animeObj = {
-            url: animeFavorito,
+            url: animeRelogio,
             nome: "",
+            colocacao: urlsAssistirMaisTarde.length + 1,
             rating: 0,
-            starState: [false, false, false, false, false]
+            checkedState: [false]
         };
-        urlsAnimes.push(animeObj)
+        urlsAssistirMaisTarde.push(animeObj)
         
         //Salva os animes atualizados no armazenamento local
-        localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
-        listarAnimesNaTela(animeObj);
+        localStorage.setItem("urlsAssistirMaisTarde", JSON.stringify(urlsAssistirMaisTarde));
+        listarAnimesParaAssistir(animeObj);
     } else {
         console.error("Endereço de anime inválido");
     }
@@ -59,86 +59,8 @@ function adicionarAnime() {
     document.getElementById("anime").value = "";
 }
 
-//Função que verifica se a tecla Enter foi pressionada
-function verificarTecla(event) {
-    if (event.keyCode === 13) {
-        adicionarAnime();
-    }
-}
-
-//Função responsável por mostrar e ocultar as instruções na página
-function mostrarInstrucoes() {
-    //Obtém referências aos elementos da página que serão manipulados
-    var subtitle = document.querySelector(".page-subtitle");
-    var placeholderContainer = document.querySelector(".form-wrapper");
-    var animeCatalog = document.getElementById("anime-catalog");
-    var removerTudo = document.getElementById("btnRemoverTodos");
-    var instrucoesTexto = document.getElementById("instrucoes-text");
-    var btnAdicionarAnime = document.getElementById("btnAdicionarAnime");
-
-    //Oculta os elementos da página durante as instruções
-    subtitle.style.display = "none";
-    placeholderContainer.style.display = "none";
-    animeCatalog.style.display = "none";
-    btnAdicionarAnime.style.display = "none"
-
-    //Verifica se o botão de remover está presente antes de tentar ocultá-lo
-    if (removerTudo) {
-        removerTudo.style.display = "none";
-    }
-
-    //Exibe o texto das instruções
-    instrucoesTexto.style.display = ""
-
-    //Botão de Voltar
-    const voltarBtn = document.getElementById("voltar-btn");
-
-    //Adiciona um evento de clique ao botão de voltar
-    voltarBtn.addEventListener("click", function() {
-        //Oculta as instruções
-        instrucoesTexto.style.display = "none";
-
-        //Exibe o conteúdo inicial
-        subtitle.style.display = "";
-        placeholderContainer.style.display = "";
-        animeCatalog.style.display = "";
-        btnAdicionarAnime.style.display = "";
-
-        //Verifica se há animes na lista para decidir o botão de remover tudo
-        var catalogAnime = document.getElementById("anime-catalog");
-        if (catalogAnime.children.length > 0) {
-            //Mostrar o botão somente se houver pelo menos um anime na tela
-            removerTudo.style.display = "";
-        } else {
-            removerTudo.style.display = "none"
-        }
-
-    });
-}
-
-function mostrarVersoes() {
-    const versoesLink = document.getElementById("versoes-link");
-    const versoesElement = document.getElementById("versoes");
-    const voltarBtnVersoes = document.getElementById("voltar-btn-versoes");
-    var instrucoesTexto = document.getElementById("instrucoes-text");
-
-    //Oculta o conteúdo atual
-    instrucoesTexto.style.display = "none";
-
-    //Exibe a seção de versões
-    versoesElement.style.display = "";
-
-    voltarBtnVersoes.addEventListener("click", function() {
-        //Oculta a seção de versões
-        versoesElement.style.display = "none";
-
-        //Exibe o conteúdo inicial
-        instrucoesTexto.style.display = ""
-    });
-}
-
 // Função para listar um anime na tela
-function listarAnimesNaTela(animeFavorito) {
+function listarAnimesParaAssistir(animeRelogio) {
     //Obtém o elemento com o id "anime-catalog"
     var catalogAnime = document.getElementById("anime-catalog");
 
@@ -149,7 +71,7 @@ function listarAnimesNaTela(animeFavorito) {
 
     //Cria um elemento de imagem e define o atributo src para o anime favorito
     var imagem = document.createElement("img");
-    imagem.src = animeFavorito.url;
+    imagem.src = animeRelogio.url;
     imagem.className = "anime-image";
     grandeDiv.appendChild(imagem);
 
@@ -191,8 +113,8 @@ function listarAnimesNaTela(animeFavorito) {
     editIcon.querySelectorAll("span").forEach(function (span) {
         span.addEventListener("click", function() {
             nomeAnime.innerHTML = "";
-            animeFavorito.nome = "";
-            localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
+            animeRelogio.nome = "";
+            localStorage.setItem("urlsAssistirMaisTarde", JSON.stringify(urlsAssistirMaisTarde));
 
             toggleMenu(menu, setaMenu);
 
@@ -203,11 +125,24 @@ function listarAnimesNaTela(animeFavorito) {
     //Adiciona o evento de clique em Remover
     deleteIcon.querySelectorAll("span").forEach(function (span) {
         span.addEventListener("click", function() {
-            catalogAnime.removeChild(grandeDiv);
-            urlsAnimes = urlsAnimes.filter(function (anime) {
-                return anime !== animeFavorito;
+            var indexToRemove = urlsAssistirMaisTarde.findIndex(function(anime) {
+                return anime.url === animeRelogio.url;
             });
-            localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
+            
+            if (indexToRemove !== -1) {
+                catalogAnime.removeChild(grandeDiv);
+
+                //Remove o anime do array de URLs
+                urlsAssistirMaisTarde.splice(indexToRemove, 1);
+
+                //Atualiza as colocações após remover um anime
+                for (var i = 0; i < urlsAssistirMaisTarde.length; i++) {
+                    urlsAssistirMaisTarde[i].colocacao = i + 1;
+                }
+            }
+
+            //Salva os animes atualizados no armazenamento local
+            localStorage.setItem("urlsAssistirMaisTarde", JSON.stringify(urlsAssistirMaisTarde));
 
             toggleMenu(menu, setaMenu);
             toggleBtnRemoverTodos();
@@ -220,8 +155,8 @@ function listarAnimesNaTela(animeFavorito) {
     var nomeAnime = document.createElement("div");
     nomeAnime.className = "anime-name";
 
-    if (animeFavorito.nome) {
-        var textoCompleto = animeFavorito.nome.replace(/<[^>]+>/g, '').trim();
+    if (animeRelogio.nome) {
+        var textoCompleto = animeRelogio.nome.replace(/<[^>]+>/g, '').trim();
         var textoLimitado = textoCompleto.slice(0, 14);
         
         if (textoCompleto.length > 14) {
@@ -236,11 +171,11 @@ function listarAnimesNaTela(animeFavorito) {
     } else {
         nomeAnime.contentEditable = true;
         nomeAnime.dataset.placeholder = "Digite o nome do anime";
-        nomeAnime.innerText = ""; // Usar innerText em vez de innerHTML
+        nomeAnime.innerText = ""; 
         nomeAnime.addEventListener("input", function() {
-            animeFavorito.nome = nomeAnime.innerText.trim(); // Usar innerText em vez de innerHTML
-            localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
-            if (nomeAnime.innerText.trim() === "") { // Usar innerText em vez de innerHTML
+            animeRelogio.nome = nomeAnime.innerText.trim();
+            localStorage.setItem("urlsAssistirMaisTarde", JSON.stringify(urlsAssistirMaisTarde));
+            if (nomeAnime.innerText.trim() === "") { 
                 nomeAnime.dataset.placeholder = "Digite o nome do anime";
             } else {
                 nomeAnime.dataset.placeholder = "";
@@ -255,14 +190,14 @@ function listarAnimesNaTela(animeFavorito) {
     }
 
     //Adicionar a classe "truncated-text" se o texto for maior que o limite
-    if (animeFavorito.nome && animeFavorito.nome.length > 14) {
+    if (animeRelogio.nome && animeRelogio.nome.length > 14) {
         nomeAnime.classList.add("truncated-text");
     }
 
     divNomeSeta.appendChild(nomeAnime);
 
     //Verifica se o nome do anime está definido
-    if (animeFavorito.nome === "") {
+    if (animeRelogio.nome === "") {
         setaMenu.style.display = "none";
     }
 
@@ -272,45 +207,107 @@ function listarAnimesNaTela(animeFavorito) {
     }
 
     //Cria um elemento div para as estrelas de classificação
-    var estrelas = document.createElement("div");
-    estrelas.className = "star-rating";
+    var verificados = document.createElement("div");
+    verificados.className = "checkeds-rating";
 
-    //Loop para criar as estrelas de classificação
-    for (var i = 0; i < 5; i++) {
-        var estrela = document.createElement("span");
-        estrela.dataset.rating = i + 1;
-        if (animeFavorito.starState[i]) {
-            estrela.classList.add('active');
+    //Loop para criar o sinal de verificado
+    for (var i = 0; i < 1; i++) {
+        var verificado = document.createElement("span");
+        verificado.dataset.rating = i + 1;
+        if (animeRelogio.checkedState[i]) {
+            verificado.classList.add('active');
         }
-        estrela.onclick = function() {
+        verificado.onclick = function() {
             var rating = parseInt(this.dataset.rating);
-            rateAnime(rating, this, animeFavorito);
+            verificadoAnime(rating, this, animeRelogio);
+            marcarAnimeComoVisto(animeRelogio.url);
         };
-        estrela.innerHTML = "&#9733;";
-        estrelas.appendChild(estrela);
+        
+        verificado.innerHTML = "&#10004";
+        verificados.appendChild(verificado);
     }
 
     //Adiciona as estrelas ao elemento do anime favorito
-    grandeDiv.appendChild(estrelas);
+    grandeDiv.appendChild(verificados);        
+
+    localStorage.setItem("urlsAssistirMaisTarde", JSON.stringify(urlsAssistirMaisTarde));
 }
 
 //Função para atribuir uma classificação a um anime
-function rateAnime(rating, star, anime) {
-    anime.rating = rating;
-    anime.starState = anime.starState.map((state, index) => index < rating);
+function verificadoAnime(rating, check, anime) {
+    // Verifica se a classificação atual é igual à classificação clicada
+    const isCurrentRating = anime.rating === rating;
 
-    const stars = star.parentNode.querySelectorAll('.star-rating span');
-    stars.forEach((s, index) => {
+    const animeContainer = check.closest('.anime-container');
+    const animeImage = animeContainer.querySelector('.anime-image');
+
+    const checks = check.parentNode.querySelectorAll('.checkeds-rating span');
+    checks.forEach((s, index) => {
         if (index < rating) {
             s.classList.add('active');
+            if (rating === 1) {
+                animeImage.classList.add('green-border');
+            }
         } else {
             s.classList.remove('active');
+            animeImage.classList.remove('green-border');
         }
     });
-    console.log('Nota:', rating);
+
+    // Se for a mesma classificação, desativa
+    if (isCurrentRating) {
+        anime.rating = 0;
+        anime.checkedState = anime.checkedState.map(() => false);
+        window.location.reload();
+    } else {
+        // Se for uma nova classificação, ativa a classificação e atualiza o estado
+        anime.rating = rating;
+        anime.checkedState = anime.checkedState.map((state, index) => index < rating);
+    }
 
     //Salva os animes atualizados no armazenamento local
-    localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
+    localStorage.setItem("urlsAssistirMaisTarde", JSON.stringify(urlsAssistirMaisTarde));
+}
+
+function marcarAnimeComoVisto(animeUrl) {
+    var urlsAnimes = JSON.parse(localStorage.getItem("urlsAnimes")) || [];
+
+    var animeParaMover = urlsAssistirMaisTarde.find(anime => anime.url === animeUrl);
+
+    if (animeParaMover) {
+
+        urlsAssistirMaisTarde = urlsAssistirMaisTarde.filter(anime => anime.url !== animeUrl);
+
+        // Criar um novo objeto com as informações do anime
+        var animeAssistido = {
+            url: animeParaMover.url,
+            nome: animeParaMover.nome,
+            rating: 1, // Definir o rating para 1 (marcado como assistido)
+            starState: [false, false, false, false, false], // Definir o estado das estrelas
+            colocacao: urlsAnimes.length + 1
+        };
+
+        //Adicionar o anime à lista de animes assistidos
+        urlsAnimes.push(animeAssistido);
+
+        //Salvar as alterações no armazenamento local
+        localStorage.setItem("urlsAnimes", JSON.stringify(urlsAnimes));
+        localStorage.setItem("urlsAssistirMaisTarde", JSON.stringify(urlsAssistirMaisTarde));
+        
+        //Atualizar as colocações após mover um anime
+        atualizarColocacoes(urlsAssistirMaisTarde);
+
+        //Atualizar as listas nas interface
+        atualizarListaAnimesAssistirMaisTarde();
+    } else {
+        console.error("Anime não encontrado na lista de assistir mais tarde")
+    }
+}
+
+function atualizarColocacoes(animeList) {
+    animeList.forEach((anime, index) => {
+        anime.colocacao = index + 1;
+    })
 }
 
 //Função para exibir/ocultar o menu
@@ -326,13 +323,25 @@ function toggleMenu(menu, setaMenu) {
 }
 
 //Carregar os animes do array inicial
-function carregarAnimes() {
-    var animesSalvos = localStorage.getItem("urlsAnimes");
-    if (animesSalvos) {
-        urlsAnimes = JSON.parse(animesSalvos);
-        for (var i = 0; i < urlsAnimes.length; i++) {
-            listarAnimesNaTela(urlsAnimes[i]);
+function carregarAnimesParaAssistir(arrayRelogio) {
+   var animesParaAssistir = localStorage.getItem("urlsAssistirMaisTarde");
+
+    if (animesParaAssistir) {
+        urlsAssistirMaisTarde = JSON.parse(animesParaAssistir);
+        urlsAssistirMaisTarde = arrayRelogio;
+
+       
+        for (var i = 0; i < urlsAssistirMaisTarde.length; i++) {
+            const anime = urlsAssistirMaisTarde[i];
+            listarAnimesParaAssistir(anime);
+
+            if (anime.rating === 1) {
+                const animeContainer = document.querySelector(`.anime-container:nth-child(${i + 1})`);
+                const animeImage = animeContainer.querySelector('.anime-image');
+                animeImage.classList.add('green-border');
+            }
         }
+
     } else {
         console.log("Nenhum anime salvo encontrado.")
     }
@@ -345,11 +354,15 @@ function carregarAnimes() {
 function toggleBtnRemoverTodos() {
     var btnRemoverTodos = document.getElementById("btnRemoverTodos");
     var catalogAnime = document.getElementById("anime-catalog");
+    var sectionTitle = document.querySelector(".section-title")
+
     if (catalogAnime.children.length > 0) {
         //Mostrar o botão somente se houver pelo menos um anime na tela
         btnRemoverTodos.style.display = "";
+        sectionTitle.style.display = "";
     } else {
-        btnRemoverTodos.style.display = "none"
+        btnRemoverTodos.style.display = "none";
+        sectionTitle.style.display = "none";
     }
 }
 
@@ -359,10 +372,10 @@ function removerTodosAnimes() {
     catalogAnime.innerHTML = "";
 
     //Limpar a array de animesd
-    urlsAnimes = [];
+    urlsAssistirMaisTarde = [];
 
     // Remover a lista de animes do armazenamento local
-    localStorage.removeItem("urlsAnimes");
+    localStorage.removeItem("urlsAssistirMaisTarde");
 
     //Esconder o botão após remover todos os animes
     toggleBtnRemoverTodos();
@@ -381,7 +394,122 @@ function confirmarRemoverTodosAnimes() {
 function fecharModalConfirmacao() {
     var modalConfirmacao = document.getElementById("modalConfirmacao");
     modalConfirmacao.style.display = "none";
-  }
+}
 
-carregarAnimes();
+$(document).ready(function () {
+    // Carregar os animes salvos do armazenamento local durante a inicialização
+    var animesParaAssistir = localStorage.getItem("urlsAssistirMaisTarde");
+    if (animesParaAssistir) {
+        urlsAssistirMaisTarde = JSON.parse(animesParaAssistir);
+    }
 
+    // Fazer uma cópia da array original para trabalhar com a ordenação
+    urlsAnimesDate = urlsAssistirMaisTarde.slice();
+    urlsAnimesName = urlsAssistirMaisTarde.slice();
+    urlsAnimesStars = urlsAssistirMaisTarde.slice();
+
+    // Opção de ordenação padrão (por data de criação, ascendente)
+    var defaultSortingOption = "dateAsc";
+    var sortingOption = localStorage.getItem("optionAssistirDepois") || defaultSortingOption;
+
+    //Função para ordenar os animes
+    function sortAnimeCatalog(option) {
+        var urlsAnimesOrdenada = [];
+
+        //Ordenar por nome, ascendente
+        if (option === "nameAsc") {
+            urlsAnimesOrdenada = urlsAnimesName.slice().sort(function(a, b) {
+                var nomeA = a.nome.toLowerCase();
+                var nomeB = b.nome.toLowerCase();
+                return nomeA.localeCompare(nomeB);
+            });
+        }
+
+        //Ordenar por nome, descendente
+        if (option === "nameDesc") {
+            urlsAnimesOrdenada = urlsAnimesName.slice().sort(function(a, b) {
+                var nomeA = a.nome.toLowerCase();
+                var nomeB = b.nome.toLowerCase();
+                return nomeB.localeCompare(nomeA);
+            });
+        }
+
+        //Ordenar por número de estrelas, ascendente
+        if (option === "starsAsc") {
+            urlsAnimesOrdenada = urlsAnimesStars.slice().sort(function(a, b) {
+                return a.rating - b.rating;
+            });
+        }
+
+        //Ordenar por número de estrelas, descendente
+        if (option === "starsDesc") {
+            urlsAnimesOrdenada = urlsAnimesStars.slice().sort(function(a, b) {
+                return b.rating - a.rating;
+            });
+        }
+
+        //Ordenar por data de criação, ascendente
+        if (option === "dateAsc") {
+            urlsAnimesOrdenada = urlsAnimesDate.slice().sort(function(a, b) {
+                return a.colocacao - b.colocacao;
+            });
+        };
+
+        //Ordenar por data de criação, descendente
+        if (option === "dateDesc") {
+            urlsAnimesOrdenada = urlsAnimesDate.slice().sort(function(a, b) {
+                return b.colocacao - a.colocacao;
+            });
+        }
+
+        localStorage.setItem("optionAssistirDepois", option)
+
+        // Depois de ordenar, atualize o catálogo de animes na página
+        $("#anime-catalog").empty();       
+        carregarAnimesParaAssistir(urlsAnimesOrdenada);
+    }
+
+    //Verifca se há uma opção de ordenação salva
+    var savedSortingOption = localStorage.getItem("optionAssistirDepois");
+    if (savedSortingOption) {
+        sortingOption = savedSortingOption;
+        $('input[name="sort-option"][value="' + sortingOption + '"]').prop("checked", true);
+        sortAnimeCatalog(sortingOption);
+    }
+
+    //Manipule a mudança no radio para definir a opção de ordenação
+     $('input[name="sort-option"]').change(function () {
+        sortingOption = $(this).val();
+        sortAnimeCatalog(sortingOption);
+        $('#sort-menu').hide();
+    })
+
+});
+
+//Manipule o clique no ícone para mostrar ou esconder o menu de opções
+function toggleSortMenu() {
+    $('#sort-menu').toggle();
+};
+
+$(document).ready(function () {
+    function verificarEAtualizarColocacao() {
+        for (var i = 0; i < urlsAssistirMaisTarde.length; i++) {
+            if (typeof urlsAssistirMaisTarde[i].colocacao === 'undefined') {
+                urlsAssistirMaisTarde[i].colocacao = i + 1;
+            }
+        }
+    }
+
+    // Definir uma colocação base para animes sem colocação
+    function definirColocacaoBase() {
+        for (var i = 0; i < urlsAssistirMaisTarde.length; i++) {
+            if (typeof urlsAssistirMaisTarde[i].colocacao === 'undefined') {
+                urlsAssistirMaisTarde[i].colocacao = i + 1;
+            }
+        }
+    }
+
+    // Verificar e atualizar a colocação ao abrir o site
+    verificarEAtualizarColocacao();
+    definirColocacaoBase();
+});
