@@ -323,13 +323,11 @@ function toggleMenu(menu, setaMenu) {
 }
 
 //Carregar os animes do array inicial
-function carregarAnimesParaAssistir(arrayRelogio) {
+function carregarAnimesParaAssistir() {
    var animesParaAssistir = localStorage.getItem("urlsAssistirMaisTarde");
 
     if (animesParaAssistir) {
         urlsAssistirMaisTarde = JSON.parse(animesParaAssistir);
-        urlsAssistirMaisTarde = arrayRelogio;
-
        
         for (var i = 0; i < urlsAssistirMaisTarde.length; i++) {
             const anime = urlsAssistirMaisTarde[i];
@@ -401,6 +399,7 @@ $(document).ready(function () {
     var animesParaAssistir = localStorage.getItem("urlsAssistirMaisTarde");
     if (animesParaAssistir) {
         urlsAssistirMaisTarde = JSON.parse(animesParaAssistir);
+        carregarAnimesParaAssistir();        
     }
 
     // Fazer uma cópia da array original para trabalhar com a ordenação
